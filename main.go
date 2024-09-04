@@ -16,15 +16,8 @@ type todo struct {
 }
 
 var todoList = []todo{
-	{ID: 0, Description: "test descriptions"},
-	{ID: 1, Description: "test descriptions2"},
-	{ID: 2, Description: "test descriptions3"},
-	{ID: 3, Description: "test descriptions4"},
-	{ID: 4, Description: "test descriptions5"},
-	{ID: 5, Description: "test descriptions6"},
+	{ID: 0, Description: "sample description"},
 }
-
-var idCounter = 1
 
 func binarySearch(arr *[]todo, target int64) (*todo, error) {
 
@@ -56,6 +49,13 @@ func addTodo(c *gin.Context) {
 	if err := c.BindJSON(&newTodo); err != nil {
 		fmt.Println("ERRROR")
 		return
+	}
+
+	for _, item := range todoList {
+		if item.ID == newTodo.ID {
+			c.IndentedJSON(http.StatusAlreadyReported, gin.H{"message": "todo exists"})
+			return
+		}
 	}
 
 	todoList = append(todoList, newTodo)
